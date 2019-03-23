@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import firebase from 'firebase';
 const config = {
 	apiKey: 'AIzaSyDVvkNFJwWIg5u8FtizLRlgHc22lGb_1aI',
@@ -12,6 +12,10 @@ const config = {
 firebase.initializeApp(config);
 
 function App() {
+	const [channels, setChannels] = useState([
+		{ topic: 'something hardcoded', id: 'general' },
+	]);
+
 	return (
 		<div className="App">
 			<div className="Nav">
@@ -28,11 +32,10 @@ function App() {
 						</div>
 					</div>
 				</div>
-				<nav className="ChannelNav">
-					<a href="/channel/awesome"># awesome</a>
-					<a className="active" href="/channel/general">
-						# general
-					</a>
+				<nav className="ChannelNav active">
+					{channels.map(channel => (
+						<a href={`/channel/${channel.id}`}># {channel.id}</a>
+					))}
 				</nav>
 			</div>
 			<div className="Channel">
