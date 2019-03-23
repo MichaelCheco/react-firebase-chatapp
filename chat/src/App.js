@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase';
+import 'firebase/firestore';
 const config = {
 	apiKey: 'AIzaSyDVvkNFJwWIg5u8FtizLRlgHc22lGb_1aI',
 	authDomain: 'chat-app-6079d.firebaseapp.com',
@@ -10,12 +11,16 @@ const config = {
 };
 
 firebase.initializeApp(config);
-
+const db = firebase.firestore();
 function App() {
 	const [channels, setChannels] = useState([
 		{ topic: 'something hardcoded', id: 'general' },
 	]);
-
+	useEffect(() => {
+		db.collection('channels').onSnapshot(snapshot => {
+			console.log(snapshot);
+		});
+	}, []);
 	return (
 		<div className="App">
 			<div className="Nav">
