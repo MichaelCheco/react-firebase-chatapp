@@ -13,11 +13,9 @@ const config = {
 firebase.initializeApp(config);
 const db = firebase.firestore();
 function App() {
-	const [channels, setChannels] = useState([
-		{ topic: 'something hardcoded', id: 'general' },
-	]);
+	const [channels, setChannels] = useState([]);
 	useEffect(() => {
-		db.collection('channels').onSnapshot(snapshot => {
+		return db.collection('channels').onSnapshot(snapshot => {
 			const docs = [];
 			snapshot.forEach(doc => {
 				docs.push({
@@ -25,7 +23,7 @@ function App() {
 					id: doc.id,
 				});
 			});
-			console.log(docs);
+			setChannels(docs);
 		});
 	}, []);
 	return (
