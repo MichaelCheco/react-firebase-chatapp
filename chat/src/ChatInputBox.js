@@ -8,7 +8,7 @@ function ChatInputBox() {
 				event.preventDefault();
 				const value = event.target.elements[0].value;
 				db.collection('channels')
-					.doc('random')
+					.doc('general')
 					.collection('messages')
 					.add({
 						text: value,
