@@ -7,6 +7,8 @@ function Messages() {
 		db.collection('channels')
 			.doc('general')
 			.collection('messages')
+			.orderBy('createdAt')
+			// .limit(5)
 			.onSnapshot(snapshot => {
 				const docs = [];
 				snapshot.forEach(doc => {
