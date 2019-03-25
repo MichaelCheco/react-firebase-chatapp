@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import useCollection from './useCollection';
-import { db } from './firebase';
+import useDocWithCache from './useDocWithCache';
 
 function Messages({ channelId }) {
 	const messages = useCollection(`channels/${channelId}/messages`, 'createdAt');
@@ -30,7 +30,7 @@ function Messages({ channelId }) {
 	);
 }
 function FirstMessageFromUser({ message, showDay }) {
-	const author = useDoc(message.user.path);
+	const author = useDocWithCache(message.user.path);
 	return (
 		<div key={message.id}>
 			{showDay && (
@@ -56,33 +56,5 @@ function FirstMessageFromUser({ message, showDay }) {
 		</div>
 	);
 }
-const cache = {};
-const pendingCache = {};
 
-function useDoc(path) {
-	const [doc, setDoc] = useState(cache[path]);
-	useEffect(() => {
-		if (doc) {
-			return;
-		}
-		let stillMounted = true;
-		const pending = pendingCache[path];
-		const promise = pending || (pendingCache[path] = db.doc(path).get());
-
-		promise.then(doc => {
-			if (stillMounted) {
-				const user = {
-					...doc.data(),
-					id: doc.id,
-				};
-				setDoc(user);
-				cache[path] = user;
-			}
-		});
-		return () => {
-			stillMounted = false;
-		};
-	}, [path]);
-	return doc;
-}
 export default Messages;
