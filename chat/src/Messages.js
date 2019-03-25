@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import useCollection from './useCollection';
 import { db } from './firebase';
 
-function Messages() {
-	const messages = useCollection('channels/general/messages', 'createdAt');
+function Messages({ channelId }) {
+	const messages = useCollection(`channels/${channelId}/messages`, 'createdAt');
 
 	return (
 		<div className="Messages">
