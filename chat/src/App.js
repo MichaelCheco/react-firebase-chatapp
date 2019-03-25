@@ -57,7 +57,6 @@ function useAuth() {
 					photoUrl: firebaseUser.photoURL,
 					uid: firebaseUser.uid,
 				};
-				console.log(user);
 				setUser(user);
 				db.collection('users') //fb will automatically create collection/doc for us
 					.doc(user.uid)
