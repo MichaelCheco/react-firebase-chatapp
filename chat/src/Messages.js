@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import useCollection from './useCollection';
 import useDocWithCache from './useDocWithCache';
 import formatDate from 'date-fns/format';
 import { isSameDay } from 'date-fns';
 
+function useChatScrollManager(ref) {
+	useEffect(() => {
+		const node = ref.current;
+		node.scrollTop = node.scrollHeight;
+	});
+}
 function Messages({ channelId }) {
 	const messages = useCollection(`channels/${channelId}/messages`, 'createdAt');
-
+	const scrollerRef = useRef();
+	useChatScrollManager(scrollerRef);
+	// ref -> keep track of a value without causing an update / side effect
 	return (
-		<div className="Messages">
+		<div className="Messages" ref={scrollerRef}>
 			<div className="EndOfMessages">That's every message!</div>
 			{messages.map((message, index) => {
 				const previous = messages[index - 1];
