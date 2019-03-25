@@ -4,17 +4,17 @@ import ChannelInfo from './ChannelInfo';
 import Messages from './Messages';
 import ChatInputBox from './ChatInputBox';
 
-function Channel() {
-  return (
-    <div className="Channel">
-      <div className="ChannelMain">
-        <ChannelInfo />
-        <Messages />
-        <ChatInputBox />
-      </div>
-      <Members />
-    </div>
-  );
+function Channel({ user }) {
+	return (
+		<div className="Channel">
+			<div className="ChannelMain">
+				<ChannelInfo />
+				<Messages />
+				<ChatInputBox user={user} />
+			</div>
+			<Members />
+		</div>
+	);
 }
 
 export default Channel;

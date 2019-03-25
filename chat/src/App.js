@@ -7,7 +7,7 @@ function App() {
 	return user ? (
 		<div className="App">
 			<Nav user={user} />
-			<Channel />
+			<Channel user={user} />
 		</div>
 	) : (
 		<Login />
@@ -44,6 +44,7 @@ function useAuth() {
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
+		// this effect allows us to persist login
 		return firebase.auth().onAuthStateChanged(firebaseUser => {
 			if (firebaseUser) {
 				const user = {
@@ -52,9 +53,9 @@ function useAuth() {
 					uid: firebaseUser.uid,
 				};
 				setUser(user);
-				db.collection('users')
+				db.collection('users') //fb will automatically create collection/doc for us
 					.doc(user.uid)
-					.set(user, { merge: true });
+					.set(user, { merge: true }); // merge adds safety
 			} else {
 				setUser(null);
 			}
