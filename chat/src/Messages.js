@@ -13,7 +13,11 @@ function Messages({ channelId }) {
 				const showDay = false;
 				const showAvatar = !previous || message.user.id !== previous.user.id;
 				return showAvatar ? (
-					<FirstMessageFromUser message={message} showDay={showDay} />
+					<FirstMessageFromUser
+						key={message.id}
+						message={message}
+						showDay={showDay}
+					/>
 				) : (
 					<div key={index}>
 						<div className="Message no-avatar">
@@ -61,7 +65,7 @@ function useDoc(path) {
 				id: doc.id,
 			});
 		});
-	}, []);
+	}, [path]);
 	return doc;
 }
 export default Messages;
