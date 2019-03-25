@@ -2,6 +2,7 @@ import React from 'react';
 import useCollection from './useCollection';
 import useDocWithCache from './useDocWithCache';
 import formatDate from 'date-fns/format';
+
 function Messages({ channelId }) {
 	const messages = useCollection(`channels/${channelId}/messages`, 'createdAt');
 
@@ -11,7 +12,7 @@ function Messages({ channelId }) {
 			{messages.map((message, index) => {
 				const previous = messages[index - 1];
 				const showDay = false;
-				const showAvatar = !previous || message.user.id !== previous.user.id;
+				const showAvatar = shouldShowAvatar(previous, message);
 				return showAvatar ? (
 					<FirstMessageFromUser
 						key={message.id}
@@ -58,5 +59,17 @@ function FirstMessageFromUser({ message, showDay }) {
 		</div>
 	);
 }
-
+function shouldShowAvatar(previous, message) {
+	const isFirst = !previous;
+	if (isFirst) {
+		return true;
+	}
+	const differentUser = message.user.id !== previous.user.id;
+	if (differentUser) {
+		return true;
+	}
+	const hasBeenAwhile =
+		message.createdAt.seconds - previous.createdAt.seconds > 180;
+	return hasBeenAwhile;
+}
 export default Messages;
