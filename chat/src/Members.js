@@ -12,7 +12,7 @@ function Members({ channelId }) {
 			<div>
 				{members.sort(sortbyName).map(member => (
 					<div className="Member" key={member.id}>
-						<div className="MemberStatus online" />
+						<div className={`MemberStatus ${member.status.state}`} />
 						{member.displayName}
 					</div>
 				))}
