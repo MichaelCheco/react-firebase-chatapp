@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Nav from './Nav';
 import Channel from './Channel';
-import { firebase, db } from './firebase';
+import { firebase, db, setUpPresence } from './firebase';
 import { Router, Redirect } from '@reach/router';
 
 function App() {
 	const user = useAuth();
+
 	return user ? (
 		<div className="App">
 			<Nav user={user} />
@@ -61,6 +62,7 @@ function useAuth() {
 				db.collection('users') //fb will automatically create collection/doc for us
 					.doc(user.uid)
 					.set(user, { merge: true }); // merge adds safety
+				setUpPresence(user);
 			} else {
 				setUser(null);
 			}
