@@ -7,11 +7,10 @@ function Members({ channelId }) {
 		'==',
 		true,
 	]);
-	console.log(members);
 	return (
 		<div className="Members">
 			<div>
-				{members.map(member => (
+				{members.sort(sortbyName).map(member => (
 					<div className="Member" key={member.id}>
 						<div className="MemberStatus online" />
 						{member.displayName}
@@ -21,5 +20,11 @@ function Members({ channelId }) {
 		</div>
 	);
 }
-
+function sortbyName(a, b) {
+	return a.displayName > b.displayName
+		? 1
+		: a.displayName < b.displayName
+		? -1
+		: 0;
+}
 export default Members;
