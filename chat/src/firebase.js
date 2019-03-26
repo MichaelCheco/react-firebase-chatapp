@@ -18,8 +18,22 @@ const db = firebase.firestore();
 const rtdb = firebase.database();
 
 export function setUpPresence(user) {
-	rtdb.ref('.info/connected').on('value', snapshot => {
-		console.log(snapshot.val());
+	const isOfflineForRTDB = {
+		state: 'offline',
+		lastChanged: firebase.database.ServerValue.TIMESTAMP,
+	};
+	const isOnlineforRTDB = {
+		state: 'online',
+		lastChanged: firebase.database.ServerValue.TIMESTAMP,
+	};
+	const rtdbRef = rtdb.ref(`/status/${user.uid}`);
+	rtdb.ref('.info/connected').on('value', async snapshot => {
+		if (snapshot.val() === false) {
+			return;
+		}
+		await rtdbRef.onDisconnect().set(isOfflineForRTDB);
+		// online
+		rtdbRef.set(isOnlineforRTDB);
 	});
 }
 export { db, firebase };
