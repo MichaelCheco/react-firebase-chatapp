@@ -1,22 +1,32 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useCollection from './useCollection';
 import useDocWithCache from './useDocWithCache';
 import formatDate from 'date-fns/format';
 import { isSameDay } from 'date-fns';
-
-function useChatScrollManager(ref) {
+// Whenever you need an event, reach for a component not a hook
+function ChatScroller(props) {
+	const ref = useRef();
+	const shouldScrollRef = useRef(true);
 	useEffect(() => {
-		const node = ref.current;
-		node.scrollTop = node.scrollHeight;
+		if (shouldScrollRef.current) {
+			const node = ref.current;
+			node.scrollTop = node.scrollHeight;
+		}
 	});
+	const handleScroll = () => {
+		const node = ref.current;
+		const { scrollTop, scrollHeight, clientHeight } = node;
+		const atBottom = scrollHeight === clientHeight + scrollTop;
+		shouldScrollRef.current = atBottom;
+	};
+	return <div {...props} ref={ref} onScroll={handleScroll} />;
 }
 function Messages({ channelId }) {
 	const messages = useCollection(`channels/${channelId}/messages`, 'createdAt');
-	const scrollerRef = useRef();
-	useChatScrollManager(scrollerRef);
+
 	// ref -> keep track of a value without causing an update / side effect
 	return (
-		<div className="Messages" ref={scrollerRef}>
+		<ChatScroller className="Messages">
 			<div className="EndOfMessages">That's every message!</div>
 			{messages.map((message, index) => {
 				const previous = messages[index - 1];
@@ -36,7 +46,7 @@ function Messages({ channelId }) {
 					</div>
 				);
 			})}
-		</div>
+		</ChatScroller>
 	);
 }
 function FirstMessageFromUser({ message, showDay }) {
