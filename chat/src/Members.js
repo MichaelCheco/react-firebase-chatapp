@@ -11,14 +11,12 @@ function Members({ channelId }) {
 	return (
 		<div className="Members">
 			<div>
-				<div className="Member">
-					<div className="MemberStatus offline" />
-					Ryan Florence
-				</div>
-				<div className="Member">
-					<div className="MemberStatus online" />
-					cleverbot
-				</div>
+				{members.map(member => (
+					<div className="Member" key={member.id}>
+						<div className="MemberStatus online" />
+						{member.displayName}
+					</div>
+				))}
 			</div>
 		</div>
 	);

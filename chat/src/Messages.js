@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import useCollection from './useCollection';
 import useDocWithCache from './useDocWithCache';
 import formatDate from 'date-fns/format';
