@@ -21,7 +21,7 @@ function Channel({ user, channelId }) {
 				<Messages channelId={channelId} />
 				<ChatInputBox user={user} channelId={channelId} />
 			</div>
-			<Members />
+			<Members channelId={channelId} />
 		</div>
 	);
 }
